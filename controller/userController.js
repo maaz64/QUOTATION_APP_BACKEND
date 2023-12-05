@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Quotation = require('../models/quotation');
 
 module.exports.signUp =async (req,res)=>{
 
@@ -39,7 +40,7 @@ module.exports.signUp =async (req,res)=>{
         }
         
     } catch (error) {
-        return res.status(201).json({
+        return res.status(500).json({
             message:"Internal Server Error",
             data:{},
             error
@@ -87,7 +88,7 @@ module.exports.signIn =async (req,res)=>{
         })
         
     } catch (error) {
-        return res.status(201).json({
+        return res.status(500).json({
             message:"Internal Server Error",
             data:{},
             error
@@ -96,6 +97,29 @@ module.exports.signIn =async (req,res)=>{
         
     }
 
-  
+}
 
+module.exports.homeQuoatation = async(req,res)=>{
+    try {
+        const quotes = await Quotation.find({});
+        if(!quotes){
+            return res.status(200).json({
+                message:"No Quotes",
+                data:{},
+                
+            });
+        }
+
+        return res.status(200).json({
+            message:"All Quotes",
+            data:{quotes},
+        });
+        
+    } catch (error) {
+        return res.status(500).json({
+            message:"Internal Server Error",
+            data:{},
+            error
+        });
+    }
 }
